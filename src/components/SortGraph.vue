@@ -3,7 +3,7 @@
     <button :disabled="sortRunning" @click="shuffleAndSort">Shuffle & Sort!</button>
     <div id="sortGraph">
       <div v-for="i in array" :key="i">
-        <div id="bar" :style="{ height: i * (36 / n2) + 'vmin', width: 73 / n2 + 'vmin' }"></div>
+        <div id="bar" :style="{ height: i * (36 / n) + 'vmin', width: 73 / n + 'vmin' }"></div>
       </div>
     </div>
     <span>
@@ -18,7 +18,7 @@
         min="1"
         max="100"
         value="10"
-        v-model.number="n2"
+        v-model.number="n"
       />
     </span>
     <h2 style="font-size: 50px">{{ sortRunning ? 'Sorting...' : 'Sorted!' }}</h2>
@@ -56,28 +56,17 @@ select {
 </style>
 
 <script lang="ts">
-import { nextTick } from 'vue'
-
 export default {
-  props: {
-    n: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-  },
-
   data() {
     return {
       graphWidth: 0 as number,
       sortRunning: false as boolean,
-      n2: 10 as number,
+      n: 10 as number,
       array: [] as number[],
     }
   },
   methods: {
     async sleep(time: number) {
-      await nextTick()
       await new Promise((r) => setTimeout(r, time))
     },
     async shuffleAndSort() {
@@ -95,7 +84,7 @@ export default {
       }
     },
     async sort() {
-      await this.quickSort(0, this.n2 - 1)
+      await this.quickSort(0, this.n - 1)
       //await this.bogoSort()
     },
     async partition(low: number, high: number): Promise<number> {
@@ -136,7 +125,7 @@ export default {
     },
   },
   watch: {
-    n2: {
+    n: {
       immediate: true,
       handler(n: number) {
         this.array = Array.from({ length: n }, (_, i) => i + 1)
