@@ -3,7 +3,7 @@
     <button :disabled="sortRunning" @click="shuffleAndSort">Shuffle & Sort!</button>
     <div id="sortGraph">
       <div v-for="i in array" :key="i">
-        <div id="bar" :style="{ height: i * (36 / n2) + 'vmin', width: 73 / n2 + 'vmin' }"></div>
+        <div id="bar" :style="{ height: i * (36 / n) + 'vmin', width: 73 / n + 'vmin' }"></div>
       </div>
     </div>
     <span>
@@ -64,12 +64,12 @@ export default {
       default: 0,
     },
   },
-
   data() {
     return {
+      array: Array.from({ length: this.n }, (_, i) => i + 1) as number[],
       graphWidth: 0 as number,
       sortRunning: false as boolean,
-      n2: 10 as number,
+      n2: 10,
     }
   },
   methods: {
@@ -91,7 +91,7 @@ export default {
       }
     },
     async sort() {
-      await this.quickSort(0, this.n2 - 1)
+      await this.quickSort(0, this.n - 1)
       //await this.bogoSort()
     },
     async partition(low: number, high: number): Promise<number> {
@@ -124,16 +124,10 @@ export default {
       }
       return true
     },
-
     async bogoSort() {
       while (!this.isSorted()) {
         await this.shuffle()
       }
-    },
-  },
-  computed: {
-    array() {
-      return Array.from({ length: this.n2 }, (_, i) => i + 1) as number[]
     },
   },
 }
