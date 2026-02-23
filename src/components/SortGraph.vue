@@ -3,7 +3,7 @@
     <button :disabled="sortRunning" @click="shuffleAndSort">Shuffle & Sort!</button>
     <div id="sortGraph">
       <div v-for="i in array" :key="i">
-        <div id="bar" :style="{ height: i * (36 / n) + 'vmin', width: 73 / n + 'vmin' }"></div>
+        <div id="bar" :style="{ height: i * (36 / n2) + 'vmin', width: 73 / n2 + 'vmin' }"></div>
       </div>
     </div>
     <span>
@@ -56,6 +56,8 @@ select {
 </style>
 
 <script lang="ts">
+import { nextTick } from 'vue'
+
 export default {
   props: {
     n: {
@@ -64,16 +66,18 @@ export default {
       default: 0,
     },
   },
+
   data() {
     return {
-      array: Array.from({ length: this.n }, (_, i) => i + 1) as number[],
       graphWidth: 0 as number,
       sortRunning: false as boolean,
-      n2: 10,
+      n2: 10 as number,
+      array: [] as number[],
     }
   },
   methods: {
     async sleep(time: number) {
+      await nextTick()
       await new Promise((r) => setTimeout(r, time))
     },
     async shuffleAndSort() {
@@ -91,7 +95,7 @@ export default {
       }
     },
     async sort() {
-      await this.quickSort(0, this.n - 1)
+      await this.quickSort(0, this.n2 - 1)
       //await this.bogoSort()
     },
     async partition(low: number, high: number): Promise<number> {
@@ -124,10 +128,19 @@ export default {
       }
       return true
     },
+
     async bogoSort() {
       while (!this.isSorted()) {
         await this.shuffle()
       }
+    },
+  },
+  watch: {
+    n2: {
+      immediate: true,
+      handler(n: number) {
+        this.array = Array.from({ length: n }, (_, i) => i + 1)
+      },
     },
   },
 }

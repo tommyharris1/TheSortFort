@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 style="text-align: center; font-size: 50px">Welcome to The Sort Fort!</h1>
-    <sort-graph :n="10" />
+    <sort-graph />
   </div>
 </template>
 
