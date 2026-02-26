@@ -1,28 +1,16 @@
 <template>
   <body id="sort">
-    <button :disabled="sortRunning" @click="shuffleAndSort">Shuffle & Sort!</button>
-    <div id="sortGraph">
-      <div v-for="i in array" :key="i">
-        <div id="bar" :style="{ height: i * (36 / n) + 'vmin', width: 73 / n + 'vmin' }"></div>
+    <button :disabled="sortRunning == 1 || sortRunning == 2" @click="shuffleAndSort" :class="{ 'dark': isBlack, 'light': !isBlack }">
+      Shuffle & Sort!
+    </button>
+    <div id="sortGraph" :class="{ 'light-border': isBlack, 'dark-border': !isBlack }">
+      <div v-for="i in array" :key="i" class="bar-wrapper">
+        <div class="bar" :style="{ height: i * (55 / n) + 'vmin' }" :class="{ 'light-background': isBlack, 'dark-background': !isBlack }"></div>
       </div>
     </div>
-    <span>
-      <select required>
-        <option disabled>--Select an algorithm--</option>
-        <option>Quick Sort</option>
-        <option>Bogo Sort</option>
-      </select>
-      <input
-        style="font-size: 50px"
-        type="number"
-        min="1"
-        max="100"
-        value="10"
-        v-model.number="n"
-      />
-    </span>
-    <h2 style="font-size: 50px">{{ sortRunning ? 'Sorting...' : 'Sorted!' }}</h2>
-    <br /><br />
+    <h2>
+      {{ sortRunning == 0 ? 'Sorted!' : sortRunning == 1 ? 'Shuffling...' : 'Sorting...' }}
+    </h2>
   </body>
 </template>
 
@@ -33,25 +21,45 @@
 
 #sort > button,
 option,
-select {
-  font-size: 50px;
-  margin: 25px;
+select,
+h2 {
+  font-size: 3.75vmin;
+  margin-bottom: 2.5vmin;
 }
 
 #sortGraph {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  border: solid 5px black;
-  width: 73vmin;
-  height: 36vmin;
+  width: 93vmin;
+  height: 55vmin;
   margin: 0 auto;
-  border-radius: 10px;
+  overflow: hidden;
 }
 
-#bar {
-  width: 1px;
-  background-color: blue;
+.bar {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.bar-wrapper {
+  flex: 1;
+}
+
+.dark-border {
+  border: solid 5px black;
+}
+
+.light-border {
+  border: solid 5px white;
+}
+
+.dark-background {
+  background-color: rgb(57, 145, 175);
+}
+
+.light-background {
+  background-color: rgb(3, 3, 104);
 }
 </style>
 
@@ -60,8 +68,7 @@ export default {
   data() {
     return {
       graphWidth: 0 as number,
-      sortRunning: false as boolean,
-      n: 10 as number,
+      sortRunning: 0 as number,
       array: [] as number[],
     }
   },
@@ -70,11 +77,13 @@ export default {
       await new Promise((r) => setTimeout(r, time))
     },
     async shuffleAndSort() {
-      this.sortRunning = true
+      this.sortRunning = 1
       await this.shuffle()
-      await this.sleep(1000)
+      await this.sleep(500)
+      this.sortRunning = 2
+      await this.sleep(500)
       await this.sort()
-      this.sortRunning = false
+      this.sortRunning = 0
     },
     async shuffle() {
       for (let i = 0; i < this.array.length; i++) {
@@ -85,7 +94,6 @@ export default {
     },
     async sort() {
       await this.quickSort(0, this.n - 1)
-      //await this.bogoSort()
     },
     async partition(low: number, high: number): Promise<number> {
       const pivot = this.array[high] as number
@@ -131,6 +139,15 @@ export default {
         this.array = Array.from({ length: n }, (_, i) => i + 1)
       },
     },
+  },
+  props: {
+    n: {
+      type: Number,
+      required: true,
+    },
+    isBlack: {
+      type: Boolean
+    }
   },
 }
 </script>
