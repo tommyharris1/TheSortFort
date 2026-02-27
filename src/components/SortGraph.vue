@@ -1,6 +1,6 @@
 <template>
   <body id="sort">
-    <button :disabled="sortRunning == 1 || sortRunning == 2" @click="shuffleAndSort" :class="{ 'dark': isBlack, 'light': !isBlack }">
+    <button :disabled="sortRunning == 1 || sortRunning == 2" @click="shuffleAndSort" :class="{ 'dark': isBlack, 'light': !isBlack, 'disabled': sortRunning == 1 || sortRunning == 2 }">
       Shuffle & Sort!
     </button>
     <div id="sortGraph" :class="{ 'light-border': isBlack, 'dark-border': !isBlack }">
@@ -60,6 +60,10 @@ h2 {
 
 .light-background {
   background-color: rgb(3, 3, 104);
+}
+
+.disabled {
+  color: gray;
 }
 </style>
 
