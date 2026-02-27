@@ -4,8 +4,8 @@
       <h1>Welcome to The Sort Fort!</h1>
       <button @click="toggleMode" id="dark" :class="{ 'dark': isBlack, 'light': !isBlack }">{{ isBlack ? "Light" : "Dark" }}<br />Mode</button>
     </span>
-    <sort-graph :n="n" :isBlack="isBlack"/>
-    <sort-options @update-n="handleUpdateN" :isBlack="isBlack"/>
+    <sort-graph :n="n" :isBlack="isBlack" :current="selection"/>
+    <sort-options @update-n="handleUpdateN" :isBlack="isBlack" @selection="updateSelection"/>
   </div>
 </template>
 
@@ -74,6 +74,7 @@ export default {
       message: 'Hello World!' as string,
       n: 10 as number,
       isBlack: false as boolean,
+      selection: '' as string
     }
   },
   methods: {
@@ -89,6 +90,9 @@ export default {
         document.body.classList.remove('dark-mode')
       }
     },
+    updateSelection(selection: string) {
+      this.selection = selection;
+    }
   },
 }
 </script>

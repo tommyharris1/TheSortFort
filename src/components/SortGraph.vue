@@ -68,6 +68,8 @@ h2 {
 </style>
 
 <script lang="ts">
+import { quickSort } from '../components/algorithms/QuickSort'
+
 export default {
   data() {
     return {
@@ -97,28 +99,16 @@ export default {
       }
     },
     async sort() {
-      await this.quickSort(0, this.n - 1)
-    },
-    async partition(low: number, high: number): Promise<number> {
-      const pivot = this.array[high] as number
-      let i = low - 1
-
-      for (let j = low; j <= high - 1; j++) {
-        await new Promise((r) => setTimeout(r, 1))
-        const curr = this.array[j] as number
-        if (curr < pivot) {
-          i++
-          ;[this.array[i], this.array[j]] = [this.array[j] ?? 0, this.array[i] ?? 0]
-        }
-      }
-      ;[this.array[i + 1], this.array[high]] = [this.array[high] ?? 0, this.array[i + 1] ?? 0]
-      return i + 1
-    },
-    async quickSort(low: number, high: number) {
-      if (low < high) {
-        const p = await this.partition(low, high)
-        await this.quickSort(low, p - 1)
-        await this.quickSort(p + 1, high)
+      switch(this.current) {
+        case "Quick Sort":
+          await quickSort(this.array, 0, this.n - 1);
+          break;
+        case "Bogo Sort":
+          await this.bogoSort();
+          break;
+        default:
+          alert("Not yet implemented!");
+          break;
       }
     },
     isSorted(): boolean {
@@ -151,6 +141,9 @@ export default {
     },
     isBlack: {
       type: Boolean
+    },
+    current: {
+      type: String
     }
   },
 }

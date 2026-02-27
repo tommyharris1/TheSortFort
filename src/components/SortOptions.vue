@@ -1,6 +1,6 @@
 <template>
   <div id="options">
-    <select :class="{ 'dark': isBlack, 'light': !isBlack }" required>
+    <select v-model="selection" @change="emitSelection" :class="{ 'dark': isBlack, 'light': !isBlack }" required>
       <option disabled>--Select an algorithm--</option>
       <div v-for="i in algorithms" :key="i.name">
         <option>{{ i.name }}</option>
@@ -35,6 +35,7 @@ input {
 export default {
   data() {
     return {
+      selection: '',
       algorithms: [
         { id: 'quick', name: 'Quick Sort', min: 10, max: 1000 },
         { id: 'bogo', name: 'Bogo Sort', min: 2, max: 8 },
@@ -50,6 +51,9 @@ export default {
     emitN() {
       this.$emit('update-n', this.localN)
     },
+    emitSelection() {
+      this.$emit('selection', this.selection);
+    }
   },
   props: {
     isBlack: {
