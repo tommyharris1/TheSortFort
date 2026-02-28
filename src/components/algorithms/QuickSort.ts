@@ -7,10 +7,10 @@ export async function partition(arr: number[], low: number, high: number): Promi
     const curr = arr[j] as number
     if (curr < pivot) {
       i++
-      ;[arr[i], arr[j]] = [arr[j] ?? 0, arr[i] ?? 0]
+      ;[arr[i], arr[j]] = [arr[j]!, arr[i]!]
     }
   }
-  ;[arr[i + 1], arr[high]] = [arr[high] ?? 0, arr[i + 1] ?? 0]
+  ;[arr[i + 1], arr[high]] = [arr[high]!, arr[i + 1]!]
   return i + 1
 }
 
