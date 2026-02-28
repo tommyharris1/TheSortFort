@@ -69,6 +69,7 @@ h2 {
 
 <script lang="ts">
 import { quickSort } from '../components/algorithms/QuickSort'
+import { bubbleSort } from '../components/algorithms/BubbleSort'
 
 export default {
   data() {
@@ -106,6 +107,9 @@ export default {
           break;
         case "Bogo Sort":
           await this.bogoSort();
+          break;
+        case "Bubble Sort":
+          await bubbleSort(this.array);
           break;
         default:
           alert("Not yet implemented!");

@@ -14,7 +14,7 @@ export async function partition(arr: number[], low: number, high: number): Promi
   return i + 1
 }
 
-export async function quickSort(arr: number[], low: number, high: number) {
+export async function quickSort(arr: number[], low: number, high: number): Promise<void> {
   if (low < high) {
     const p = await partition(arr, low, high)
     await quickSort(arr, low, p - 1)
