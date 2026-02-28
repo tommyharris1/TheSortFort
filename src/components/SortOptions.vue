@@ -2,17 +2,18 @@
   <div id="options">
     <select v-model="selection" @change="emitSelection" :class="{ 'dark': isBlack, 'light': !isBlack }" required>
       <option disabled>--Select an algorithm--</option>
-      <div v-for="i in algorithms" :key="i.name">
-        <option>{{ i.name }}</option>
-      </div>
+        <option v-for="algo in algorithms" :key="algo.id" :value="algo">
+          {{ algo.name }}
+        </option>
     </select>
     <input
-      type="number"
-      min="1"
-      max="1000"
-      value="10"
       v-model.number="localN"
+      type="number"
+      min="0"
+      :max="selection.max"
+      value="10"
       @change="emitN"
+      @input="restrictRange(selection.max)"
       :class="{ 'dark': isBlack, 'light': !isBlack }"
     />
   </div>
@@ -35,16 +36,16 @@ input {
 export default {
   data() {
     return {
-      selection: '',
+      selection: { id: 'quick', name: 'Quick Sort', max: 1000 },
       algorithms: [
-        { id: 'quick', name: 'Quick Sort', min: 10, max: 1000 },
-        { id: 'bogo', name: 'Bogo Sort', min: 2, max: 8 },
-        { id: 'bubble', name: 'Bubble Sort', min: 10, max: 1000 },
-        { id: 'merge', name: 'Merge Sort', min: 10, max: 1000 },
-        { id: 'selection', name: 'Selection Sort', min: 10, max: 1000 },
-        { id: 'insertion', name: 'Insertion Sort', min: 10, max: 1000 },
+        { id: 'quick', name: 'Quick Sort', max: 1000 },
+        { id: 'bogo', name: 'Bogo Sort', max: 7 },
+        { id: 'bubble', name: 'Bubble Sort', max: 1000 },
+        { id: 'merge', name: 'Merge Sort', max: 1000 },
+        { id: 'selection', name: 'Selection Sort', max: 1000 },
+        { id: 'insertion', name: 'Insertion Sort', max: 1000 },
       ],
-      localN: 10,
+      localN: 10 as number,
     }
   },
   methods: {
@@ -53,11 +54,30 @@ export default {
     },
     emitSelection() {
       this.$emit('selection', this.selection);
+    },
+    restrictRange(max: number) {
+      if(this.localN > max) {
+        this.localN = max;
+      }
+      else if(this.localN < 0) {
+        this.localN = 0;
+      }
     }
   },
   props: {
     isBlack: {
       type: Boolean
+    }
+  },
+  watch: {
+    selection(algo) {
+      if(this.localN > algo.max) {
+        this.localN = algo.max;
+      }
+
+      if(this.localN < 0) {
+        this.localN = 0;
+      }
     }
   }
 }

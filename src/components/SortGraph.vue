@@ -99,7 +99,8 @@ export default {
       }
     },
     async sort() {
-      switch(this.current) {
+      switch(this.current.name) {
+        case "":
         case "Quick Sort":
           await quickSort(this.array, 0, this.n - 1);
           break;
@@ -143,7 +144,8 @@ export default {
       type: Boolean
     },
     current: {
-      type: String
+      type: Object,
+      required: true
     }
   },
 }

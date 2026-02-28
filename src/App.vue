@@ -65,6 +65,11 @@ body.dark-mode, .dark {
 button {
   box-shadow: 2px 2px 4px black;
 }
+
+select, input {
+  border-radius: 0.5vmin;
+  border-width: 3px;
+}
 </style>
 
 <script lang="ts">
@@ -74,7 +79,7 @@ export default {
       message: 'Hello World!' as string,
       n: 10 as number,
       isBlack: false as boolean,
-      selection: '' as string
+      selection: { id: 'quick', name: 'Quick Sort', max: 1000 }
     }
   },
   methods: {
@@ -90,7 +95,7 @@ export default {
         document.body.classList.remove('dark-mode')
       }
     },
-    updateSelection(selection: string) {
+    updateSelection(selection: { id: string, name: string, max: number }) {
       this.selection = selection;
     }
   },
