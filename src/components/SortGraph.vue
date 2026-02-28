@@ -1,6 +1,10 @@
 <template>
   <body id="sort">
-    <button :disabled="sortRunning == 1 || sortRunning == 2" @click="shuffleAndSort" :class="{ 'dark': isBlack, 'light': !isBlack, 'disabled': sortRunning == 1 || sortRunning == 2 }">
+    <button
+      :disabled="sortRunning == 1 || sortRunning == 2"
+      @click="shuffleAndSort"
+      :class="{ 'dark': isBlack, 'light': !isBlack, 'disabled': sortRunning == 1 || sortRunning == 2 }"
+    >
       Shuffle & Sort!
     </button>
     <div id="sortGraph" :class="{ 'light-border': isBlack, 'dark-border': !isBlack }">
@@ -67,90 +71,81 @@ h2 {
 }
 </style>
 
-<script lang="ts">
+<script setup lang="ts">
+import { ref, type Ref, watch } from 'vue'
 import { quickSort } from '../components/algorithms/QuickSort'
 import { bubbleSort } from '../components/algorithms/BubbleSort'
 
-export default {
-  data() {
-    return {
-      graphWidth: 0 as number,
-      sortRunning: 0 as number,
-      array: [] as number[],
-    }
-  },
-  methods: {
-    async sleep(time: number) {
-      await new Promise((r) => setTimeout(r, time))
-    },
-    async shuffleAndSort() {
-      this.sortRunning = 1
-      await this.shuffle()
-      await this.sleep(500)
-      this.sortRunning = 2
-      await this.sleep(500)
-      await this.sort()
-      this.sortRunning = 0
-    },
-    async shuffle() {
-      for (let i = 0; i < this.array.length; i++) {
-        await this.sleep(1)
-        const j = Math.floor(Math.random() * (i + 1))
-        ;[this.array[i], this.array[j]] = [this.array[j]!, this.array[i]!]
-      }
-    },
-    async sort() {
-      switch(this.current.name) {
-        case "":
-        case "Quick Sort":
-          await quickSort(this.array, 0, this.n - 1);
-          break;
-        case "Bogo Sort":
-          await this.bogoSort();
-          break;
-        case "Bubble Sort":
-          await bubbleSort(this.array);
-          break;
-        default:
-          alert("Not yet implemented!");
-          break;
-      }
-    },
-    isSorted(): boolean {
-      for (let i = 1; i < this.array.length; i++) {
-        if ((this.array[i] as number) < (this.array[i - 1] as number)) {
-          return false
-        }
-      }
-      return true
-    },
+const sortRunning: Ref<number> = ref(0);
+const array = ref<number[]>(Array.from({ length: 10 }, (_, i) => i + 1));
 
-    async bogoSort() {
-      while (!this.isSorted()) {
-        await this.shuffle()
-      }
-    },
-  },
-  watch: {
-    n: {
-      immediate: true,
-      handler(n: number) {
-        this.array = Array.from({ length: n }, (_, i) => i + 1)
-      },
-    },
-  },
-  props: {
-    n: {
-      type: Number,
-      required: true,
-    },
-    isBlack: {
-      type: Boolean
-    },
-    current: {
-      type: Object,
-      required: true
+const props = defineProps<{
+  n: number
+  isBlack?: boolean
+  current: {
+    name: string
+  }
+}>();
+
+watch(
+  () => props.n,
+  (n) => {
+    array.value = Array.from({ length: n }, (_, i) => i + 1);
+  }
+)
+
+async function sleep(time: number) {
+  await new Promise((r) => setTimeout(r, time))
+}
+
+async function shuffleAndSort() {
+  sortRunning.value = 1
+  await shuffle()
+  await sleep(500)
+  sortRunning.value = 2
+  await sleep(500)
+  await sort()
+  sortRunning.value = 0
+}
+
+async function shuffle() {
+  for (let i = 0; i < array.value.length; i++) {
+    await sleep(1)
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[array.value[i], array.value[j]] = [array.value[j]!, array.value[i]!]
+  }
+}
+
+async function sort() {
+  switch(props.current.name) {
+    case "":
+    case "Quick Sort":
+      await quickSort(array.value, 0, props.n - 1);
+      break;
+    case "Bogo Sort":
+      await bogoSort();
+      break;
+    case "Bubble Sort":
+      await bubbleSort(array.value);
+      break;
+    default:
+      alert("Not yet implemented!");
+      break;
+  }
+}
+
+function isSorted(): boolean {
+  for (let i = 1; i < array.value.length; i++) {
+    if ((array.value[i] as number) < (array.value[i - 1] as number)) {
+      return false
     }
-  },
+  }
+  return true
+}
+
+async function bogoSort() {
+  while (!isSorted()) {
+    await shuffle()
+  }
 }
 </script>
