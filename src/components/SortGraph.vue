@@ -96,7 +96,7 @@ export default {
       for (let i = 0; i < this.array.length; i++) {
         await this.sleep(1)
         const j = Math.floor(Math.random() * (i + 1))
-        ;[this.array[i], this.array[j]] = [this.array[j] ?? 0, this.array[i] ?? 0]
+        ;[this.array[i], this.array[j]] = [this.array[j]!, this.array[i]!]
       }
     },
     async sort() {

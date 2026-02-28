@@ -9,7 +9,7 @@
     <input
       v-model.number="localN"
       type="number"
-      min="0"
+      min="1"
       :max="selection.max"
       value="10"
       @change="emitN"
@@ -36,9 +36,9 @@ input {
 export default {
   data() {
     return {
-      selection: { id: 'quick', name: 'Quick Sort', max: 1000 },
+      selection: { id: 'quick', name: 'Quick Sort', max: 500 },
       algorithms: [
-        { id: 'quick', name: 'Quick Sort', max: 1000 },
+        { id: 'quick', name: 'Quick Sort', max: 500 },
         { id: 'bogo', name: 'Bogo Sort', max: 7 },
         { id: 'bubble', name: 'Bubble Sort', max: 1000 },
         { id: 'merge', name: 'Merge Sort', max: 1000 },
@@ -75,9 +75,10 @@ export default {
         this.localN = algo.max;
       }
 
-      if(this.localN < 0) {
-        this.localN = 0;
+      if(this.localN < 2) {
+        this.localN = 2;
       }
+      this.emitN();
     }
   }
 }
