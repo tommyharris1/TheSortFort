@@ -3,13 +3,17 @@
     <button
       :disabled="sortRunning == 1 || sortRunning == 2"
       @click="shuffleAndSort"
-      :class="{ 'dark': isBlack, 'light': !isBlack, 'disabled': sortRunning == 1 || sortRunning == 2 }"
+      :class="{ dark: isBlack, light: !isBlack, disabled: sortRunning == 1 || sortRunning == 2 }"
     >
       Shuffle & Sort!
     </button>
     <div id="sortGraph" :class="{ 'light-border': isBlack, 'dark-border': !isBlack }">
       <div v-for="i in array" :key="i" class="bar-wrapper">
-        <div class="bar" :style="{ height: i * (55 / n) + 'vmin' }" :class="{ 'light-background': isBlack, 'dark-background': !isBlack }"></div>
+        <div
+          class="bar"
+          :style="{ height: i * (55 / n) + 'vmin' }"
+          :class="{ 'light-background': isBlack, 'dark-background': !isBlack }"
+        ></div>
       </div>
     </div>
     <h2>
@@ -75,9 +79,12 @@ h2 {
 import { ref, type Ref, watch } from 'vue'
 import { quickSort } from '../components/algorithms/QuickSort'
 import { bubbleSort } from '../components/algorithms/BubbleSort'
+import { mergeSort } from '../components/algorithms/MergeSort'
+import { selectionSort } from '../components/algorithms/SelectionSort'
+import { insertionSort } from '../components/algorithms/InsertionSort'
 
-const sortRunning: Ref<number> = ref(0);
-const array = ref<number[]>(Array.from({ length: 10 }, (_, i) => i + 1));
+const sortRunning: Ref<number> = ref(0)
+const array = ref<number[]>(Array.from({ length: 10 }, (_, i) => i + 1))
 
 const props = defineProps<{
   n: number
@@ -85,13 +92,13 @@ const props = defineProps<{
   current: {
     name: string
   }
-}>();
+}>()
 
 watch(
   () => props.n,
   (n) => {
-    array.value = Array.from({ length: n }, (_, i) => i + 1);
-  }
+    array.value = Array.from({ length: n }, (_, i) => i + 1)
+  },
 )
 
 async function sleep(time: number) {
@@ -117,20 +124,29 @@ async function shuffle() {
 }
 
 async function sort() {
-  switch(props.current.name) {
-    case "":
-    case "Quick Sort":
-      await quickSort(array.value, 0, props.n - 1);
-      break;
-    case "Bogo Sort":
-      await bogoSort();
-      break;
-    case "Bubble Sort":
-      await bubbleSort(array.value);
-      break;
+  switch (props.current.name) {
+    case '':
+    case 'Quick Sort':
+      await quickSort(array.value, 0, props.n - 1)
+      break
+    case 'Bogo Sort':
+      await bogoSort()
+      break
+    case 'Bubble Sort':
+      await bubbleSort(array.value)
+      break
+    case 'Merge Sort':
+      array.value = await mergeSort(array.value)
+      break
+    case 'Selection Sort':
+      await selectionSort(array.value)
+      break
+    case 'Insertion Sort':
+      await insertionSort(array.value)
+      break
     default:
-      alert("Not yet implemented!");
-      break;
+      alert('Not yet implemented!')
+      break
   }
 }
 

@@ -2,14 +2,21 @@
   <div>
     <span>
       <h1>Welcome to The Sort Fort!</h1>
-      <button @click="toggleMode" id="dark" :class="{ 'dark': isBlack, 'light': !isBlack }">{{ isBlack ? "Light" : "Dark" }}<br />Mode</button>
+      <button @click="toggleMode" id="dark" :class="{ dark: isBlack, light: !isBlack }">
+        {{ isBlack ? 'Light' : 'Dark' }}<br />Mode
+      </button>
     </span>
-    <sort-graph :n="n" :isBlack="isBlack" :current="selection"/>
-    <sort-options @update-n="handleUpdateN" :isBlack="isBlack" @selection="updateSelection"/>
+    <sort-graph :n="n" :isBlack="isBlack" :current="selection" />
+    <sort-options @update-n="handleUpdateN" :isBlack="isBlack" @selection="updateSelection" />
   </div>
 </template>
 
 <style>
+h1 {
+  text-align: center;
+  font-size: 5vmin;
+}
+
 span {
   display: flex;
   align-items: center;
@@ -17,16 +24,21 @@ span {
   position: relative;
 }
 
+button {
+  box-shadow: 2px 2px 4px black;
+}
+
+select,
+input {
+  border-radius: 0.5vmin;
+  border-width: 3px;
+}
+
 #dark {
   position: absolute;
   right: 0;
   font-size: 2.5vmin;
   margin-right: 2.5vmin;
-}
-
-h1 {
-  text-align: center;
-  font-size: 5vmin;
 }
 
 #first > button:hover {
@@ -51,7 +63,8 @@ h1 {
   text-align: center;
 }
 
-body.dark-mode, .dark {
+body.dark-mode,
+.dark {
   color: white;
   background-color: black;
   border-color: white;
@@ -60,15 +73,6 @@ body.dark-mode, .dark {
 .light {
   color: black;
   background-color: lightgray;
-}
-
-button {
-  box-shadow: 2px 2px 4px black;
-}
-
-select, input {
-  border-radius: 0.5vmin;
-  border-width: 3px;
 }
 </style>
 
@@ -79,7 +83,7 @@ export default {
       message: 'Hello World!' as string,
       n: 10 as number,
       isBlack: false as boolean,
-      selection: { id: 'quick', name: 'Quick Sort', max: 1000 }
+      selection: { id: 'quick', name: 'Quick Sort', max: 1000 },
     }
   },
   methods: {
@@ -90,14 +94,13 @@ export default {
       this.isBlack = !this.isBlack
       if (this.isBlack) {
         document.body.classList.add('dark-mode')
-
       } else {
         document.body.classList.remove('dark-mode')
       }
     },
-    updateSelection(selection: { id: string, name: string, max: number }) {
-      this.selection = selection;
-    }
+    updateSelection(selection: { id: string; name: string; max: number }) {
+      this.selection = selection
+    },
   },
 }
 </script>
