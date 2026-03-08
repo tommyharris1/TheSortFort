@@ -49,20 +49,6 @@ input {
   cursor: crosshair;
 }
 
-#wrapper {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-#wrapper > div {
-  border: solid rgb(1, 63, 1) 5px;
-  flex-basis: 250px;
-  margin: 10px;
-  padding: 10px;
-  background-color: lightgreen;
-  text-align: center;
-}
-
 body.dark-mode,
 .dark {
   color: white;
