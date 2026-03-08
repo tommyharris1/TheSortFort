@@ -6,8 +6,7 @@
         {{ isBlack ? 'Light' : 'Dark' }}<br />Mode
       </button>
     </span>
-    <sort-graph :n="n" :isBlack="isBlack" :current="selection" />
-    <sort-options @update-n="handleUpdateN" :isBlack="isBlack" @selection="updateSelection" />
+    <sort-graph :isBlack="isBlack" />
   </div>
 </template>
 
@@ -67,15 +66,10 @@ export default {
   data() {
     return {
       message: 'Hello World!' as string,
-      n: 10 as number,
       isBlack: false as boolean,
-      selection: { id: 'quick', name: 'Quick Sort', max: 1000 },
     }
   },
   methods: {
-    handleUpdateN(newN: number) {
-      this.n = Number(newN)
-    },
     toggleMode() {
       this.isBlack = !this.isBlack
       if (this.isBlack) {
@@ -83,9 +77,6 @@ export default {
       } else {
         document.body.classList.remove('dark-mode')
       }
-    },
-    updateSelection(selection: { id: string; name: string; max: number }) {
-      this.selection = selection
     },
   },
 }

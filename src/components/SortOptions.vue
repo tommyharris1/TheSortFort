@@ -14,7 +14,7 @@
     <input
       v-model.number="localN"
       type="number"
-      min="1"
+      min="2"
       :max="selection.max"
       value="10"
       @change="emitN"

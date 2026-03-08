@@ -11,7 +11,7 @@
       <div v-for="i in array" :key="i" class="bar-wrapper">
         <div
           class="bar"
-          :style="{ height: i * (55 / n) + 'vmin' }"
+          :style="{ height: i * (55 / N) + 'vmin' }"
           :class="{ 'light-background': isBlack, 'dark-background': !isBlack }"
         ></div>
       </div>
@@ -19,6 +19,7 @@
     <h2>
       {{ sortRunning == 0 ? 'Sorted!' : sortRunning == 1 ? 'Shuffling...' : 'Sorting...' }}
     </h2>
+    <SortOptions @update-n="updateN" @selection="updateSelection" :is-black="isBlack"></SortOptions>
   </body>
 </template>
 
@@ -82,22 +83,21 @@ import { bubbleSort } from '../components/algorithms/BubbleSort'
 import { mergeSort } from '../components/algorithms/MergeSort'
 import { selectionSort } from '../components/algorithms/SelectionSort'
 import { insertionSort } from '../components/algorithms/InsertionSort'
+import SortOptions from '../components/SortOptions.vue'
 
 const sortRunning: Ref<number> = ref(0)
 const array = ref<number[]>(Array.from({ length: 10 }, (_, i) => i + 1))
+const selection = ref({ id: 'quick', name: 'Quick Sort', max: 500 })
+const N = ref(10)
 
-const props = defineProps<{
-  n: number
+defineProps<{
   isBlack?: boolean
-  current: {
-    name: string
-  }
 }>()
 
 watch(
-  () => props.n,
-  (n) => {
-    array.value = Array.from({ length: n }, (_, i) => i + 1)
+  () => N.value,
+  (N) => {
+    array.value = Array.from({ length: N }, (_, i) => i + 1)
   },
 )
 
@@ -124,10 +124,10 @@ async function shuffle() {
 }
 
 async function sort() {
-  switch (props.current.name) {
+  switch (selection.value.name) {
     case '':
     case 'Quick Sort':
-      await quickSort(array.value, 0, props.n - 1)
+      await quickSort(array.value, 0, N.value - 1)
       break
     case 'Bogo Sort':
       await bogoSort()
@@ -163,5 +163,13 @@ async function bogoSort() {
   while (!isSorted()) {
     await shuffle()
   }
+}
+
+function updateSelection(sel: { id: string; name: string; max: number }) {
+  selection.value = sel
+}
+
+function updateN(newN: number) {
+  N.value = newN
 }
 </script>
