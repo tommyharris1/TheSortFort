@@ -1,7 +1,7 @@
 <template>
   <div>
     <span>
-      <h1>Welcome to The Sort Fort!</h1>
+      <h1>Welcome to The Sort Fort!!!</h1>
       <button @click="toggleMode" id="dark" :class="{ dark: isBlack, light: !isBlack }">
         {{ isBlack ? 'Light' : 'Dark' }}<br />Mode
       </button>
