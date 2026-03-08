@@ -7,10 +7,13 @@
     >
       Shuffle & Sort!
     </button>
-    <div id="sortGraph" :class="{ 'light-border': isBlack, 'dark-border': !isBlack }">
-      <div v-for="i in array" :key="i" class="bar-wrapper">
+    <div
+      id="sortGraph"
+      :style="{ gridTemplateColumns: `repeat(${N}, 1fr)` }"
+      :class="{ 'light-border': isBlack, 'dark-border': !isBlack }"
+    >
+      <div v-for="i in array" :key="i">
         <div
-          class="bar"
           :style="{ height: i * (55 / N) + 'vmin' }"
           :class="{ 'light-background': isBlack, 'dark-background': !isBlack }"
         ></div>
@@ -37,22 +40,14 @@ h2 {
 }
 
 #sortGraph {
-  display: flex;
+  display: grid;
   flex-wrap: wrap;
   align-items: flex-end;
   width: 93vmin;
   height: 55vmin;
   margin: 0 auto;
   overflow: hidden;
-}
-
-.bar {
-  flex: 1 1 0;
-  min-width: 0;
-}
-
-.bar-wrapper {
-  flex: 1;
+  grid-template-columns: repeat(auto-fill, 1fr);
 }
 
 .dark-border {
@@ -84,6 +79,7 @@ import { mergeSort } from '../components/algorithms/MergeSort'
 import { selectionSort } from '../components/algorithms/SelectionSort'
 import { insertionSort } from '../components/algorithms/InsertionSort'
 import SortOptions from '../components/SortOptions.vue'
+import { sleep } from '../components/utils/Sleep'
 
 const sortRunning: Ref<number> = ref(0)
 const array = ref<number[]>(Array.from({ length: 10 }, (_, i) => i + 1))
@@ -100,10 +96,6 @@ watch(
     array.value = Array.from({ length: N }, (_, i) => i + 1)
   },
 )
-
-async function sleep(time: number) {
-  await new Promise((r) => setTimeout(r, time))
-}
 
 async function shuffleAndSort() {
   sortRunning.value = 1
@@ -125,7 +117,6 @@ async function shuffle() {
 
 async function sort() {
   switch (selection.value.name) {
-    case '':
     case 'Quick Sort':
       await quickSort(array.value, 0, N.value - 1)
       break
@@ -150,6 +141,12 @@ async function sort() {
   }
 }
 
+async function bogoSort() {
+  while (!isSorted()) {
+    await shuffle()
+  }
+}
+
 function isSorted(): boolean {
   for (let i = 1; i < array.value.length; i++) {
     if ((array.value[i] as number) < (array.value[i - 1] as number)) {
@@ -157,12 +154,6 @@ function isSorted(): boolean {
     }
   }
   return true
-}
-
-async function bogoSort() {
-  while (!isSorted()) {
-    await shuffle()
-  }
 }
 
 function updateSelection(sel: { id: string; name: string; max: number }) {
