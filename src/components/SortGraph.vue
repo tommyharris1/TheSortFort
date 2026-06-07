@@ -127,7 +127,7 @@ async function sort() {
       await bubbleSort(array.value)
       break
     case 'Merge Sort':
-      array.value = await mergeSort(array.value)
+      await mergeSort(array.value, 0, array.value.length)
       break
     case 'Selection Sort':
       await selectionSort(array.value)

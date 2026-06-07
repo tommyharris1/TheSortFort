@@ -1,26 +1,39 @@
-export async function mergeSort(arr: number[]): Promise<number[]> {
-  if (arr.length <= 1) {
-    return arr
-  }
-  const middle = Math.floor(arr.length / 2)
-  const left = await mergeSort(arr.slice(0, middle))
-  const right = await mergeSort(arr.slice(middle))
-  return await merge(left, right)
+import { sleep } from '../../components/utils/Sleep'
+
+export async function mergeSort(arr: number[], start: number, end: number): Promise<void> {
+  if(end - start <= 1) return
+  const mid = Math.floor((start + end) / 2)
+  await mergeSort(arr, start, mid)
+  await mergeSort(arr, mid, end)
+  await merge(arr, start, mid, end)
 }
 
-export async function merge(left: number[], right: number[]): Promise<number[]> {
-  const result: number[] = []
+export async function merge(arr: number[], start: number, mid: number, end: number): Promise<void> {
   let leftIndex = 0
   let rightIndex = 0
 
+  const left = arr.slice(start, mid)
+  const right = arr.slice(mid, end)
   while (leftIndex < left.length && rightIndex < right.length) {
-    await new Promise((r) => setTimeout(r, 20))
+    await sleep(1)
     if (left[leftIndex]! < right[rightIndex]!) {
-      result.push(left[leftIndex++]!)
+      arr[start + leftIndex + rightIndex] = left[leftIndex]!
+      leftIndex++
     } else {
-      result.push(right[rightIndex++]!)
+      arr[start + leftIndex + rightIndex] = right[rightIndex]!
+      rightIndex++
     }
   }
 
-  return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex))
+  while (leftIndex < left.length) {
+    await sleep(1)
+    arr[start + leftIndex + rightIndex] = left[leftIndex]!
+    leftIndex++
+  }
+
+  while (rightIndex < right.length) {
+    await sleep(1)
+    arr[start + leftIndex + rightIndex] = right[rightIndex]!
+    rightIndex++
+  }
 }
