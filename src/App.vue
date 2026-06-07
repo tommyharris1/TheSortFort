@@ -40,14 +40,6 @@ input {
   margin-right: 2.5vmin;
 }
 
-#first > button:hover {
-  cursor: grab;
-}
-
-#last > button:hover {
-  cursor: crosshair;
-}
-
 body.dark-mode,
 .dark {
   color: white;
@@ -66,7 +58,7 @@ export default {
   data() {
     return {
       message: 'Hello World!' as string,
-      isBlack: false as boolean,
+      isBlack: localStorage.getItem("darkMode") === "true",
     }
   },
   methods: {
@@ -77,7 +69,13 @@ export default {
       } else {
         document.body.classList.remove('dark-mode')
       }
+      localStorage.setItem("darkMode", this.isBlack.toString())
     },
   },
+  mounted() {
+    if (this.isBlack) {
+      document.body.classList.add('dark-mode')
+    }
+  }
 }
 </script>

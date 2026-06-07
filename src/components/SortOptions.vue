@@ -20,6 +20,7 @@
       @change="emitN"
       @input="restrictRange(selection.max)"
       :class="{ dark: isBlack, light: !isBlack }"
+      @contextmenu.prevent
     />
   </div>
 </template>
@@ -47,7 +48,7 @@ export default {
         { id: 'bogo', name: 'Bogo Sort', max: 7 },
         { id: 'bubble', name: 'Bubble Sort', max: 1000 },
         { id: 'merge', name: 'Merge Sort', max: 1000 },
-        { id: 'selection', name: 'Selection Sort', max: 20 },
+        { id: 'selection', name: 'Selection Sort', max: 50 },
         { id: 'insertion', name: 'Insertion Sort', max: 100 },
       ],
       localN: 10 as number,
