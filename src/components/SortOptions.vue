@@ -42,14 +42,9 @@ input {
 export default {
   data() {
     return {
-      selection: (() => {
-        try {
-          return JSON.parse(localStorage.getItem("algorithm")!);
-        }
-        catch {
-          return { id: 'quick', name: 'Quick Sort', max: 500 }
-        }
-      })(),
+      selection: localStorage.getItem("algorithm")
+                ? JSON.parse(localStorage.getItem("algorithm")!)
+                : { id: 'quick', name: 'Quick Sort', max: 500 },
       algorithms: [
         { id: 'quick', name: 'Quick Sort', max: 500 },
         { id: 'bogo', name: 'Bogo Sort', max: 7 },
