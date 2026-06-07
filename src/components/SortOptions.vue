@@ -42,7 +42,14 @@ input {
 export default {
   data() {
     return {
-      selection: { id: 'quick', name: 'Quick Sort', max: 500 },
+      selection: (() => {
+        try {
+          return JSON.parse(localStorage.getItem("algorithm")!);
+        }
+        catch {
+          return { id: 'quick', name: 'Quick Sort', max: 500 }
+        }
+      })(),
       algorithms: [
         { id: 'quick', name: 'Quick Sort', max: 500 },
         { id: 'bogo', name: 'Bogo Sort', max: 7 },
@@ -51,15 +58,17 @@ export default {
         { id: 'selection', name: 'Selection Sort', max: 50 },
         { id: 'insertion', name: 'Insertion Sort', max: 100 },
       ],
-      localN: 10 as number,
+      localN: localStorage.getItem("n") ? parseInt(localStorage.getItem("n")!) : 10,
     }
   },
   methods: {
     emitN() {
       this.$emit('update-n', this.localN)
+      localStorage.setItem("n", this.localN.toString())
     },
     emitSelection() {
       this.$emit('selection', this.selection)
+      localStorage.setItem("algorithm", JSON.stringify(this.selection))
     },
     restrictRange(max: number) {
       if (this.localN > max) {
@@ -86,5 +95,9 @@ export default {
       this.emitN()
     },
   },
+  mounted() {
+    this.emitN()
+    this.emitSelection()
+  }
 }
 </script>
