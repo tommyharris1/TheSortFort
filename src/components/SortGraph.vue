@@ -80,6 +80,7 @@ import { selectionSort } from '../components/algorithms/SelectionSort'
 import { insertionSort } from '../components/algorithms/InsertionSort'
 import SortOptions from '../components/SortOptions.vue'
 import { sleep } from '../components/utils/Sleep'
+import { heapSort } from '../components/algorithms/HeapSort'
 
 const sortRunning: Ref<number> = ref(0)
 const array = ref<number[]>(Array.from({ length: 10 }, (_, i) => i + 1))
@@ -116,6 +117,7 @@ async function shuffle() {
 }
 
 async function sort() {
+  // Calls the appropriate sorting algorithm based on the selection
   switch (selection.value.name) {
     case 'Quick Sort':
       await quickSort(array.value, 0, N.value - 1)
@@ -134,6 +136,9 @@ async function sort() {
       break
     case 'Insertion Sort':
       await insertionSort(array.value)
+      break
+    case 'Heap Sort':
+      await heapSort(array.value)
       break
     default:
       alert('Not yet implemented!')

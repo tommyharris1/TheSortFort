@@ -1,10 +1,12 @@
+import { sleep } from '../../components/utils/Sleep'
+
 export async function selectionSort(arr: number[]): Promise<number[]> {
   const n = arr.length
   for (let i = 0; i < n - 1; i++) {
     let minIndex = i
 
     for (let j = i + 1; j < n; j++) {
-      await new Promise((r) => setTimeout(r, 1))
+      await sleep(1)
       if (arr[j]! < arr[minIndex]!) {
         minIndex = j
       }

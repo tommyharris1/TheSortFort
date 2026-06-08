@@ -3,6 +3,7 @@
     <span>
       <h1>Welcome to The Sort Fort!</h1>
       <button @click="toggleMode" id="dark" :class="{ dark: isBlack, light: !isBlack }">
+        <!-- Toggle button for dark/light mode - text changes based on current mode -->
         {{ isBlack ? 'Light' : 'Dark' }}<br />Mode
       </button>
     </span>
@@ -57,11 +58,12 @@ body.dark-mode,
 export default {
   data() {
     return {
-      message: 'Hello World!' as string,
+      // Retrieves dark mode preference from localStorage
       isBlack: localStorage.getItem("darkMode") === "true",
     }
   },
   methods: {
+    // Switches between dark and light mode and saves to localStorage
     toggleMode() {
       this.isBlack = !this.isBlack
       if (this.isBlack) {
@@ -74,6 +76,7 @@ export default {
   },
   mounted() {
     if (this.isBlack) {
+      // Apply dark mode class to body on initial load if dark mode is enabled
       document.body.classList.add('dark-mode')
     }
   }

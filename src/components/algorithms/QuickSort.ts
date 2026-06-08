@@ -1,9 +1,11 @@
+import { sleep } from '../../components/utils/Sleep'
+
 export async function partition(arr: number[], low: number, high: number): Promise<number> {
   const pivot = arr[high] as number
   let i = low - 1
 
   for (let j = low; j <= high - 1; j++) {
-    await new Promise((r) => setTimeout(r, 1))
+    await sleep(1)
     const curr = arr[j] as number
     if (curr < pivot) {
       i++
